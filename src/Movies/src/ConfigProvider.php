@@ -8,6 +8,10 @@ use Mezzio\Application;
 use Mezzio\Container\ApplicationConfigInjectionDelegator;
 use Movies\Handler\RenderMoviesHandler;
 use Movies\Handler\RenderMoviesHandlerFactory;
+use Movies\Services\Database\MovieTable;
+use Movies\Services\Database\MovieTableFactory;
+use Movies\Services\Database\TableAbstractFactory;
+use Movies\Services\Database\TableGatewayAbstractFactory;
 use Movies\Services\FileMovieDataService;
 
 /**
@@ -38,16 +42,21 @@ class ConfigProvider
     public function getDependencies() : array
     {
         return [
-            'invokables' => [
-                'MovieData' => FileMovieDataService::class,
-            ],
-            'factories'  => [
-                RenderMoviesHandler::class => RenderMoviesHandlerFactory::class,
+            'abstract_factories' => [
+                TableAbstractFactory::class,
+                TableGatewayAbstractFactory::class,
             ],
             'delegators' => [
                 Application::class => [
                     ApplicationConfigInjectionDelegator::class,
                 ],
+            ],
+            'factories'  => [
+                MovieTable::class => MovieTableFactory::class,
+                RenderMoviesHandler::class => RenderMoviesHandlerFactory::class,
+            ],
+            'invokables' => [
+                'MovieData' => FileMovieDataService::class,
             ],
         ];
     }

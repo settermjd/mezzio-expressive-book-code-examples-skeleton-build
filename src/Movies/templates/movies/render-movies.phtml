@@ -17,12 +17,12 @@
             <?php /** @var \Movies\Entities\Movie $movie */ ?>
             <?php foreach ($this->movies as $movie): ?>
                 <tr>
-                    <td><?php print $movie['title']; ?></td>
-                    <td><?php print $movie['director']; ?></td>
-                    <td><?php print (new \DateTime($movie['release_date']))->format('d/M/Y'); ?></td>
-                    <td><?php print implode(', ', $movie['stars']); ?></td>
-                    <td><?php print $movie['synopsis']; ?></td>
-                    <td><?php print implode(', ', $movie['genre']); ?></td>
+                    <td><?php print $movie->getTitle(); ?></td>
+                    <td><?php print $movie->getDirector(); ?></td>
+                    <td><?php print (new \DateTime($movie->getReleaseDate()))->format('d/M/Y'); ?></td>
+                    <td><?php print $movie->getStars(); ?></td>
+                    <td><?php print $movie->getSynopsis(); ?></td>
+                    <td><?php print $movie->getGenre(); ?></td>
                 </tr
             <?php endforeach; ?>
             </tbody>

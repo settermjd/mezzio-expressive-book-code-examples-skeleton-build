@@ -5,6 +5,7 @@ namespace Movies\Handler;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
+use Movies\Services\Database\MovieTable;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -33,7 +34,7 @@ class RenderMoviesHandler implements RequestHandlerInterface
      * @param TemplateRendererInterface $template
      */
     public function __construct(
-        $movieData,
+        MovieTable $movieData,
         RouterInterface $router,
         TemplateRendererInterface $template
     ) {
@@ -49,7 +50,7 @@ class RenderMoviesHandler implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $data = [
-            'movies' => $this->movieData
+            'movies' => $this->movieData->fetchAll()
         ];
 
         $html = $this->template->render(

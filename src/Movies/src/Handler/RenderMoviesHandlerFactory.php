@@ -5,6 +5,7 @@ namespace Movies\Handler;
 use Interop\Container\ContainerInterface;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
+use Movies\Services\Database\MovieTable;
 
 class RenderMoviesHandlerFactory
 {
@@ -14,8 +15,8 @@ class RenderMoviesHandlerFactory
      */
     public function __invoke(ContainerInterface $container) : RenderMoviesHandler
     {
-        $movieData = $container->has('MovieData')
-            ? $container->get('MovieData')
+        $movieData = $container->has(MovieTable::class)
+            ? $container->get(MovieTable::class)
             : null;
         $router   = $container->get(RouterInterface::class);
         $template = $container->get(TemplateRendererInterface::class);
