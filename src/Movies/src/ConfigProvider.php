@@ -7,11 +7,10 @@ namespace Movies;
 use Mezzio\Application;
 use Mezzio\Container\ApplicationConfigInjectionDelegator;
 use Movies\Handler\RenderMoviesHandler;
+use Movies\Handler\RenderMoviesHandlerDelegatorFactory;
 use Movies\Handler\RenderMoviesHandlerFactory;
 use Movies\Handler\RenderMoviesHandlerPipeline;
 use Movies\Handler\RenderMoviesHandlerPipelineWithTraitFactory;
-use Movies\Middleware\AuthenticationMiddleware;
-use Movies\Middleware\AuthorizationMiddleware;
 use Movies\Services\Database\MovieTable;
 use Movies\Services\Database\MovieTableFactory;
 use Movies\Services\Database\TableAbstractFactory;
@@ -54,12 +53,16 @@ class ConfigProvider
                 Application::class => [
                     ApplicationConfigInjectionDelegator::class,
                 ],
+                RenderMoviesHandler::class => [
+                    RenderMoviesHandlerDelegatorFactory::class,
+                ]
             ],
             'factories'  => [
                 MovieTable::class => MovieTableFactory::class,
                 RenderMoviesHandler::class => RenderMoviesHandlerFactory::class,
                 RenderMoviesHandlerPipeline::class => RenderMoviesHandlerPipeline::class,
-                RenderMoviesHandlerPipelineWithTraitFactory::class => RenderMoviesHandlerPipelineWithTraitFactory::class
+                RenderMoviesHandlerPipelineWithTraitFactory::class => RenderMoviesHandlerPipelineWithTraitFactory::class,
+                RenderMoviesHandlerDelegatorFactory::class => RenderMoviesHandlerDelegatorFactory::class,
             ],
             'invokables' => [
                 'MovieData' => FileMovieDataService::class,
@@ -85,9 +88,7 @@ class ConfigProvider
             [
                 'path'            => '/',
                 'name'            => 'home',
-                'middleware'      => [
-                    RenderMoviesHandlerPipelineWithTraitFactory::class
-                ],
+                'middleware'      => RenderMoviesHandler::class,
                 'allowed_methods' => ['GET'],
             ],
         ];
