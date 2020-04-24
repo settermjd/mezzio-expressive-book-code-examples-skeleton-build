@@ -1,0 +1,8 @@
+<?php
+
+return [
+    // Use 'db' to add the configuration for the database
+    // You can find more information at https://docs.laminas.dev/laminas-db/adapter/.
+    'db' => [
+    ]
+];
