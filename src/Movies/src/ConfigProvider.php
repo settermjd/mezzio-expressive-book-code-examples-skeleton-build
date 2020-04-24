@@ -8,6 +8,9 @@ use Mezzio\Application;
 use Mezzio\Container\ApplicationConfigInjectionDelegator;
 use Movies\Handler\RenderMoviesHandler;
 use Movies\Handler\RenderMoviesHandlerFactory;
+use Movies\Handler\RenderMoviesHandlerPipeline;
+use Movies\Middleware\AuthenticationMiddleware;
+use Movies\Middleware\AuthorizationMiddleware;
 use Movies\Services\Database\MovieTable;
 use Movies\Services\Database\MovieTableFactory;
 use Movies\Services\Database\TableAbstractFactory;
@@ -54,6 +57,7 @@ class ConfigProvider
             'factories'  => [
                 MovieTable::class => MovieTableFactory::class,
                 RenderMoviesHandler::class => RenderMoviesHandlerFactory::class,
+                RenderMoviesHandlerPipeline::class => RenderMoviesHandlerPipeline::class,
             ],
             'invokables' => [
                 'MovieData' => FileMovieDataService::class,
@@ -79,7 +83,9 @@ class ConfigProvider
             [
                 'path'            => '/',
                 'name'            => 'home',
-                'middleware'      => RenderMoviesHandler::class,
+                'middleware'      => [
+                    RenderMoviesHandlerPipeline::class
+                ],
                 'allowed_methods' => ['GET'],
             ],
         ];
